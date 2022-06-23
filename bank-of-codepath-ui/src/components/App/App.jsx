@@ -47,8 +47,8 @@ export default function App() {
                   newTransactionFormInit={newTransactionFormInit}
                 />} />
             <Route
-              path="transactions/:transactionId"
-              component={
+              path="/transactions/:transactionId"
+              element={
                 <TransactionDetail />} />
           </Routes>
         </main>

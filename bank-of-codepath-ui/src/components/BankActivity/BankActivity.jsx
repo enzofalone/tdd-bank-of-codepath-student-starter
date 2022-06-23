@@ -1,5 +1,6 @@
 import * as React from "react"
 import { formatDate, formatAmount } from "../../utils/format"
+import { Link } from "react-router-dom"
 import "./BankActivity.css"
 
 export default function BankActivity(props) {
@@ -14,7 +15,7 @@ export default function BankActivity(props) {
           <span className="col x15">Date</span>
         </div>
         {props.transactions?.map((transaction) => {
-          TransactionRow(transaction);
+          return <TransactionRow key={transaction.id} transaction={transaction} />
         })}
       </div>
 
@@ -26,15 +27,19 @@ export default function BankActivity(props) {
           <span className="col x2">Amount</span>
           <span className="col x15">Date</span>
         </div>
-        {}
+        {props.transfers?.map((transfer) => {
+          return (
+            <TransferRow key={transfer.id} transfer={transfer} />
+          )
+        })}
       </div>
-    </div>
+    </div >
   )
 }
 
 export function TransactionRow({ transaction = {} }) {
   return (
-    <div className="table-row transaction-row">
+    <Link to={`/transactions/${transaction.id}`} className="table-row transaction-row">
       <span className="col x4">
         <Arrow amount={transaction.amount} />
         {transaction.description}
@@ -42,13 +47,13 @@ export function TransactionRow({ transaction = {} }) {
       <span className="col x2">{transaction.category}</span>
       <span className="col x2">{formatAmount(transaction.amount)}</span>
       <span className="col x15">{formatDate(transaction.postedAt)}</span>
-    </div>
+    </Link>
   )
 }
 
 export function TransferRow({ transfer = {} }) {
   return (
-    <div className="table-row transfer-row">
+    <Link to={`/transfers/${transfer.id}`} className="table-row transfer-row">
       <span className="col x4">
         <Arrow amount={transfer.amount} />
         {transfer.memo}
@@ -56,7 +61,7 @@ export function TransferRow({ transfer = {} }) {
       <span className="col x2">{transfer.recipientEmail}</span>
       <span className="col x2">{formatAmount(transfer.amount)}</span>
       <span className="col x15">{formatDate(transfer.postedAt)}</span>
-    </div>
+    </Link>
   )
 }
 

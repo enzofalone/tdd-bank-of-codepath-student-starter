@@ -78,7 +78,7 @@ export default function Home(props) {
         setForm={props.setNewTransactionForm}
         handleOnSubmit={handleOnCreateTransaction} />
 
-      {props.isLoading ? <h1>Loading...</h1> : <BankActivity transactions={filteredTransactions} />}
+      {props.isLoading ? <h1>Loading...</h1> : <BankActivity transactions={filteredTransactions} transfers={props.transfers}/>}
       {/* {getBankActivity()} */}
     </div>
   )
