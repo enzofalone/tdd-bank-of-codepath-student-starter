@@ -6,35 +6,52 @@ import { API_BASE_URL } from "../../constants"
 import "./Home.css"
 
 export default function Home(props) {
+  const handleOnCreateTransaction = async () => {
+    props.setIsCreating(true);
+    console.log(props.newTransactionForm);
+    await axios.post(`${API_BASE_URL}/bank/transactions`, { transaction:props.newTransactionForm})
+      .then((res) => {
+        console.log(res);
+        props.setTransactions((prevTrans) => [...prevTrans, res.data.transaction])
+      }).catch((error) => {
+        props.setError(error);
+      }).finally(() => {
+
+      });
+
+    props.setNewTransactionForm(props.newTransactionFormInit);
+    props.setIsCreating(false);
+  }
+
   // run when mounted
   React.useEffect(() => {
-    
+
     const fetchData = () => {
       props.setIsLoading(true)
       axios
-      .get("http://localhost:3001/bank/transactions")
-      .then((res) => {
-        props.setTransactions(res.data.transactions)
-      })
-      .catch((error) => {
-        props.setError(error)
-      })
+        .get(`${API_BASE_URL}/bank/transactions`)
+        .then((res) => {
+          props.setTransactions(res.data.transactions)
+        })
+        .catch((error) => {
+          props.setError(error)
+        })
 
       axios
-      .get("http://localhost:3001/bank/transfers")
-      .then((res) => {
-        props.setTransfers(res.data.transfers)
-      })
-      .catch((error) => {
-        props.setError(error)
-      })
-      .finally(() => {
-        props.setIsLoading(false);
-      })
+        .get(`${API_BASE_URL}/bank/transfers`)
+        .then((res) => {
+          props.setTransfers(res.data.transfers)
+        })
+        .catch((error) => {
+          props.setError(error)
+        })
+        .finally(() => {
+          props.setIsLoading(false);
+        })
     }
     fetchData()
-    
-  },[])
+
+  }, [])
 
 
   // filter transactions
@@ -48,11 +65,7 @@ export default function Home(props) {
     filteredTransactions = props.transactions;
   }
 
-  const handleOnSubmitNewTransaction = () => {
-
-  }
-
-  if(props.error) {
+  if (props.error) {
     return <h2 className="error">{props.error}</h2>
   }
 
@@ -63,9 +76,9 @@ export default function Home(props) {
         setIsCreating={props.setIsCreating}
         form={props.newTransactionForm}
         setForm={props.setNewTransactionForm}
-        handleOnSubmit={handleOnSubmitNewTransaction} />
+        handleOnSubmit={handleOnCreateTransaction} />
 
-      {props.isLoading ? <h1>Loading...</h1> : <BankActivity transactions={filteredTransactions}/>}
+      {props.isLoading ? <h1>Loading...</h1> : <BankActivity transactions={filteredTransactions} />}
       {/* {getBankActivity()} */}
     </div>
   )

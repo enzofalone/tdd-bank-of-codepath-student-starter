@@ -2,7 +2,7 @@ import * as React from "react"
 import { formatDate, formatAmount } from "../../utils/format"
 import "./BankActivity.css"
 
-export default function BankActivity() {
+export default function BankActivity(props) {
   return (
     <div className="bank-activity">
       <h2>Transactions</h2>
@@ -13,7 +13,9 @@ export default function BankActivity() {
           <span className="col x2">Amount</span>
           <span className="col x15">Date</span>
         </div>
-        {/* */}
+        {props.transactions?.map((transaction) => {
+          TransactionRow(transaction);
+        })}
       </div>
 
       <h2>Transfers</h2>
@@ -24,7 +26,7 @@ export default function BankActivity() {
           <span className="col x2">Amount</span>
           <span className="col x15">Date</span>
         </div>
-        {/* */}
+        {}
       </div>
     </div>
   )
